@@ -1,4 +1,4 @@
-发布时间：Feb 14, 2011，pages 28/28，No.1
+发布时间：Feb 14, 2011
 
 原文链接：[Improving the performance of your HTML5 App](https://web.dev/speed-html5/)
 

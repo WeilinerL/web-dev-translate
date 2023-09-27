@@ -1,4 +1,4 @@
-发布时间：Feb 24, 2010，pages 28/28，No.17
+发布时间：Feb 24, 2010
 
 原文链接：[Using the Notifications API](https://web.dev/notifications-quick/)
 

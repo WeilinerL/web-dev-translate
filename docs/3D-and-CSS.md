@@ -1,4 +1,4 @@
-发布时间：Sep 7, 2010，pages 28/28，No.10
+发布时间：Sep 7, 2010
 
 原文链接：[3D and CSS](https://web.dev/3d-css/)
 
