@@ -4,10 +4,11 @@
 
 # description
 
-本项目用于爬取 web.dev 官网的相关文章进行处理，并保存为 md 文件
+本项目用于爬取 web.dev 官网的相关文章，并通过chat-gpt-4进行翻译，最终保存为 md 文件
 
 # start
+为了防止被刷，这里通过参数注入openai的API key以及Organization ID
 
 ```
-npm run start
+npm run start -- OPENAI_API_KEY=xxx ORG=xxx
 ```
