@@ -12,9 +12,7 @@ get(`${DOMAIN}/blog/${page}/`).then(
     const article = articles[index];
     const articlePath = `${DOMAIN}${article.href}`;
     get(articlePath).then((res) => {
-      const prefix = `发布时间：${article.time}，pages ${page}/28，No.${
-        index + 1
-      }\n
+      const prefix = `发布时间：${article.time}\n
 原文链接：[${article.title}](${articlePath})\n
 Translated by GPT-4 with ❤️（翻译过程中若有错误或遗漏，欢迎评论区指出👏）
 `;
