@@ -19,7 +19,13 @@ Translated by GPT-4 with ❤️（翻译过程中若有错误或遗漏，欢迎�
 我们检查是否支持`webkitNotifications`。请注意，之所以命名为`webkitNotifications`是因为它是草案规范的一部分。最终规格将会有一个 notifications() 函数代替。
 
 ```js
-// 检查是否支持通知//你可以省略'window'关键字if (window.webkitNotifications) {console.log("支持通知!");}else {console.log("此浏览器/OS版本暂不支持通知。");}
+// 检查是否支持通知
+//你可以省略'window'关键字
+if (window.webkitNotifications) {
+  console.log("支持通知!");
+} else {
+  console.log("此浏览器/OS版本暂不支持通知。");
+}
 ```
 
 ## 步骤 2：让用户赋予网站显示通知的权限
@@ -27,21 +33,37 @@ Translated by GPT-4 with ❤️（翻译过程中若有错误或遗漏，欢迎�
 我们提到的任何构造函数都会在用户尚未手动向网站授予显示通知的权限的情况下抛出一个安全错误。要处理异常，你可以使用 try-catch 语句，也可以用 `checkPermission` 方法来达到同样的目的。
 
 ```js
-document.querySelector('#show_button').addEventListener('click', function() {if (window.webkitNotifications.checkPermission() == 0) { // 0是 PERMISSION_ALLOWED// 在步骤2中定义的函数window.webkitNotifications.createNotification(    'icon.png', '通知标题', '通知内容...');} else {window.webkitNotifications.requestPermission();}}, false);
+document.querySelector('#show_button').addEventListener('click', function() {
+  if (window.webkitNotifications.checkPermission() == 0) { // 0是 PERMISSION_ALLOWED
+  // 在步骤2中定义的函数
+  window.webkitNotifications.createNotification(    'icon.png', '通知标题', '通知内容...');
+  } else {
+    window.webkitNotifications.requestPermission();
+  }
+}, false);
 ```
 
 如果 web 应用没有权限显示通知，那么`requestPermission`方法会显示一个信息栏：
 
-<p align=center><img src="undefined" alt="undefined"  /></p>
+<p align=center><img src="https://web-dev.imgix.net/image/T4FyVKpzu4WKF1kBNvXepbi08t52/xMGNoXBSBwsm4UcerTSa.png?auto=format" alt="The notifications permission infobar in Google Chrome"  /></p>
 
-在 Google Chrome 中的通知权限信息栏。
+_<p align=center>在 Google Chrome 中的通知权限信息栏。</p>_
 
 然而，**非常重要**的一点是，`requestPermission`方法只在由用户操作触发的事件处理器中工作，比如鼠标或键盘事件，这样可以避免弹出不必要的信息栏。在这个例子中，用户操作就是点击带有 id "show_button"的按钮。如果用户没有在某个点明确地点击一个按钮或链接去触发`requestPermission`，上面的代码片段将不起作用。
 
 ## 步骤 3：附加监听器和其他操作
 
 ```js
-document.querySelector('#show_button').addEventListener('click', function() {  if (window.webkitNotifications.checkPermission() == 0) { // 0是 PERMISSION_ALLOWED    // 在步骤2中定义的函数    notification_test = window.webkitNotifications.createNotification(      'icon.png', 'Notification Title', 'Notification content...');    notification_test.ondisplay = function() { ... do something ... };    notification_test.onclose = function() { ... do something else ... };    notification_test.show();  } else {    window.webkitNotifications.requestPermission();  }}, false);
+document.querySelector('#show_button').addEventListener('click', function() {
+  if (window.webkitNotifications.checkPermission() == 0) { // 0是 PERMISSION_ALLOWED
+    // 在步骤2中定义的函数
+    notification_test = window.webkitNotifications.createNotification(      'icon.png', 'Notification Title', 'Notification content...');
+    notification_test.ondisplay = function() { ... do something ... };
+    notification_test.onclose = function() { ... do something else ... };
+    notification_test.show();
+  } else {
+    window.webkitNotifications.requestPermission();
+  }}, false);
 ```
 
 至此，你可能想创建你自己的 Notification 类，将所有这些事件和操作封装起来，使代码更简洁，尽管这超出了这个教程的范围。
