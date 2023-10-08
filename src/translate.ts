@@ -16,7 +16,7 @@ const getPrefix = (title = '-', time = '-', path = 'https://web.dev/blog') => {
  */
 export const translateArticleList = (folder?: string, translate = true) => {
   const page = 28; // 当前翻译的页码
-  const index = 12; // 当前页面对应的第几篇文章
+  const index = 16; // 当前页面对应的第几篇文章（从0开始）
   get(`${DOMAIN}/blog/${page}/`, {
     headers: {
       'Accept-Language': 'zh-CN,zh;q=0.9',
