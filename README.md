@@ -14,7 +14,7 @@
 
 ## attention
 
-项目入口文件（src/index.ts），中有两个变量控制翻译[web.dev](https://web.dev/blog/)第几篇文章：
+在文件`src/translate.ts`的函数`translateArticleList`中，有两个变量控制翻译[web.dev](https://web.dev/blog/)第几篇文章：
 
 ```
 const page = 28 // 当前翻译的页码
