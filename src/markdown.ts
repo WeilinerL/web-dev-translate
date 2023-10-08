@@ -1,7 +1,6 @@
 import fs from 'fs';
 import Turndown from 'turndown';
 import prettier from 'prettier';
-import { load } from 'cheerio';
 import { MD_DIR } from './config';
 import { chatWithGPT } from './openai';
 
@@ -41,32 +40,49 @@ turndownService.addRule('formatTitle', {
   },
 });
 
-export const saveHtml2MD = async (html: string, prefix: string) => {
-  const $ = load(html);
-  const article = $('article').first();
-  const title = article.find('header h1').text();
-  article.find('header, details').remove();
-  article.find('.docked-actions, a.button').remove();
-  const md = turndownService.turndown(article.html() as string);
+/**
+ *
+ * @param title 文章标题
+ * @param content 文章内容
+ * @param prefix 文章前缀说明
+ */
+export const saveHtml2MD = async (
+  title: string,
+  content: string,
+  prefix: string,
+  options?: {
+    folder?: string;
+    translate?: boolean;
+  }
+) => {
+  const md = turndownService.turndown(content as string);
   const lines = md.split(/\n/g);
   let offset = 0;
-  let output = '';
-  while (offset < lines.length) {
-    const chunk = await chatWithGPT(
-      `请把以下内容翻译成中文：\n${lines.slice(offset, offset + 50).join('\n')}`
-    );
-    output += `${chunk}\n`;
-    offset += 50;
+  let output = md;
+  const needTranslate =
+    options?.translate === undefined || options.translate === true;
+  if (needTranslate) {
+    output = '';
+    while (offset < lines.length) {
+      const chunk = await chatWithGPT(
+        `请把以下内容翻译成中文：\n${lines
+          .slice(offset, offset + 50)
+          .join('\n')}`
+      );
+      output += `${chunk}\n`;
+      offset += 50;
+    }
+    output = `${prefix}\n\n${output}`;
   }
-  output = `${prefix}\n\n${output}`;
   const formated = await prettier.format(output, {
     parser: 'markdown',
   });
-  if (!fs.existsSync(MD_DIR)) {
-    fs.mkdirSync(MD_DIR, { recursive: true });
+  const DIR = options?.folder ? `${MD_DIR}/${options.folder}` : MD_DIR;
+  if (!fs.existsSync(DIR)) {
+    fs.mkdirSync(DIR, { recursive: true });
   }
   fs.writeFile(
-    `${MD_DIR}/${title.split(/\s+/g).join('-')}.md`,
+    `${DIR}/${title.split(/\s+/g).join('-')}.md`,
     formated,
     (err) => {
       console.log(err);

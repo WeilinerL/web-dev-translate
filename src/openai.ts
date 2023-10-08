@@ -13,14 +13,20 @@ const openai = new OpenAI({
   httpAgent: new HttpsProxyAgent('http://127.0.0.1:7890'),
 });
 
+/**
+ *
+ * @param content 提问
+ * @param options
+ * @returns
+ */
 export const chatWithGPT = (
-  content: string,
+  question: string,
   options?: ChatCompletionCreateParamsStreaming
 ) => {
   return openai.chat.completions
     .create({
       model: 'gpt-4',
-      messages: [{ role: 'user', content }],
+      messages: [{ role: 'user', content: question }],
       stream: true,
       ...options,
     })

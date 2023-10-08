@@ -1,5 +1,10 @@
 import { load } from 'cheerio';
 
+/**
+ * 获取博客列表
+ * @param html html文档字符串
+ * @returns
+ */
 export const getAllArticles = (html: string) => {
   const $ = load(html);
   const articles: { title?: string; href?: string; time?: string }[] = [];
@@ -22,4 +27,28 @@ export const getAllArticles = (html: string) => {
     });
   });
   return articles;
+};
+
+/**
+ * 获取单个博客信息
+ * @param html html文档字符串
+ * @returns
+ */
+export const getArticle = (html: string) => {
+  const $ = load(html);
+  const href = $('head').find('link[rel="canonical"]').attr('href');
+  const article = $('article').first();
+  const title = article.find('header h1').text();
+  const time = article.find('header time').text();
+  article.find('header, details').remove();
+  article.find('.docked-actions, a.button').remove();
+
+  const content = article.html() ?? '';
+
+  return {
+    href,
+    title,
+    time,
+    content,
+  };
 };
